@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FxzzId Store - Galactic Payment Terminal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Share+Tech+Mono&family=Rajdhani:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #9c27b0;
+      --secondary: #673ab7;
+      --dark: #0a0a20;
+      --accent: #e91e63;
+      --purple-light: #ba68c8;
+      --purple-dark: #4a148c;
+      --danger: #ff3a3a;
+      --glow: 0 0 20px rgba(156, 39, 176, 0.8);
+      --text-glow: 0 0 15px rgba(233, 30, 99, 0.9);
+      --pink-glow: 0 0 25px rgba(233, 30, 99, 0.7);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    html, body {
+      height: 100%;
+      width: 100%;
+      font-family: 'Rajdhani', sans-serif;
+      background: linear-gradient(135deg, #0a0a20, #1a1a3a, #2a2a5a);
+      color: white;
+      overflow: hidden;
+      perspective: 1000px;
+    }
+    
+    .cosmic-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -3;
+      background: 
+        radial-gradient(circle at 20% 30%, rgba(156, 39, 176, 0.2) 0%, transparent 25%),
+        radial-gradient(circle at 80% 70%, rgba(103, 58, 183, 0.2) 0%, transparent 25%),
+        linear-gradient(rgba(10, 10, 32, 0.9), rgba(10, 10, 32, 0.95));
+      overflow: hidden;
+    }
+    
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--duration) infinite ease-in-out;
+      opacity: 0;
+      filter: drop-shadow(0 0 5px var(--purple-light));
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: var(--opacity); transform: scale(1); }
+    }
+    
+    .comet {
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.9), var(--purple-light));
+      border-radius: 50%;
+      filter: blur(1.5px);
+      box-shadow: var(--pink-glow);
+      z-index: -2;
+      opacity: 0;
+    }
+    
+    .comet::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      height: 3px;
+      background: linear-gradient(90deg, var(--purple-light), transparent);
+    }
+    
+    @keyframes cometFly {
+      0% { 
+        transform: translateX(0) translateY(0);
+        opacity: 1;
+      }
+      100% { 
+        transform: translateX(-1500px) translateY(500px);
+        opacity: 0;
+      }
+    }
+    
+    .planet {
+      position: absolute;
+      border-radius: 50%;
+      z-index: -2;
+      filter: drop-shadow(0 0 20px rgba(156, 39, 176, 0.5));
+    }
+    
+    .ring {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(156, 39, 176, 0.3);
+      z-index: -2;
+    }
+    
+    .nebula {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(156, 39, 176, 0.1), transparent 70%);
+      z-index: -2;
+      filter: blur(30px);
+    }
+    
+    .container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+      transform-style: preserve-3d;
+      overflow: hidden;
+    }
+    
+    .music-control {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100;
+      background: rgba(10, 10, 32, 0.9);
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--glow);
+      border: 2px solid var(--purple-light);
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .music-control:hover {
+      transform: scale(1.1) translateY(-15px);
+      background: var(--primary);
+      box-shadow: 0 0 30px var(--primary);
+    }
+    
+    .music-control i {
+      font-size: 1.5rem;
+      color: var(--purple-light);
+    }
+    
+    .logo {
+      width: 180px;
+      margin-bottom: 40px;
+      border-radius: 50%;
+      box-shadow: 0 0 40px rgba(156, 39, 176, 0.8);
+      transition: all 0.5s ease;
+      border: 3px solid var(--purple-light);
+      animation: pulse 3s infinite, rotate 25s linear infinite;
+      filter: drop-shadow(0 0 20px var(--accent));
+      z-index: 10;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); box-shadow: 0 0 40px rgba(156, 39, 176, 0.8); }
+      50% { transform: scale(1.08); box-shadow: 0 0 60px rgba(233, 30, 99, 1); }
+      100% { transform: scale(1); box-shadow: 0 0 40px rgba(156, 39, 176, 0.8); }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    h1 {
+      margin-bottom: 50px;
+      font-size: 3.5rem;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 4px;
+      text-shadow: var(--text-glow);
+      position: relative;
+      background: linear-gradient(90deg, var(--purple-light), var(--accent), #ffeb3b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: textGlow 2s infinite alternate;
+      z-index: 10;
+    }
+    
+    @keyframes textGlow {
+      from { text-shadow: 0 0 15px var(--purple-light); }
+      to { text-shadow: 0 0 25px var(--accent); }
+    }
+    
+    h1::after {
+      content: '';
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 200px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      border-radius: 4px;
+      animation: lineGlow 2s infinite;
+    }
+    
+    @keyframes lineGlow {
+      0%, 100% { opacity: 0.5; width: 200px; }
+      50% { opacity: 1; width: 250px; }
+    }
+    
+    .payment-options {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 50px;
+      max-width: 1000px;
+      animation: fadeIn 1s ease-out;
+      z-index: 10;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .btn {
+      background: rgba(26, 26, 58, 0.8);
+      color: #fff;
+      border: none;
+      padding: 22px 45px;
+      font-size: 1.3rem;
+      border-radius: 15px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 280px;
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--purple-light);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+      animation: btnFloat 8s ease-in-out infinite;
+    }
+    
+    @keyframes btnFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-15px) rotate(2deg); }
+      50% { transform: translateY(0) rotate(0deg); }
+      75% { transform: translateY(-8px) rotate(-2deg); }
+    }
+    
+    .btn:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+    
+    .btn:nth-child(3) {
+      animation-delay: 1s;
+    }
+    
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(156, 39, 176, 0.4), transparent);
+      transition: 0.6s;
+      z-index: -1;
+    }
+    
+    .btn:hover::before {
+      left: 100%;
+    }
+    
+    .btn i {
+      margin-right: 15px;
+      font-size: 1.5rem;
+      color: var(--purple-light);
+    }
+    
+    .btn:hover {
+      background: rgba(156, 39, 176, 0.4);
+      transform: translateY(-10px) scale(1.08);
+      box-shadow: 0 20px 40px rgba(156, 39, 176, 0.6);
+      border-color: var(--accent);
+    }
+    
+    .btn:active {
+      transform: translateY(-3px) scale(1.03);
+    }
+    
+    #output-wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background: rgba(10, 10, 32, 0.98);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      backdrop-filter: blur(15px);
+    }
+    
+    #output-wrapper.active {
+      opacity: 1;
+      display: flex;
+    }
+    
+    #output {
+      font-size: 2.2rem;
+      padding: 50px;
+      background: rgba(26, 26, 58, 0.6);
+      border-radius: 25px;
+      min-height: 250px;
+      min-width: 450px;
+      max-width: 90%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      border: 2px solid var(--purple-light);
+      box-shadow: var(--glow);
+      position: relative;
+      overflow: hidden;
+      animation: modalFadeIn 0.6s ease-out;
+    }
+    
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    #output::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(
+        transparent,
+        rgba(156, 39, 176, 0.3),
+        transparent
+      );
+      transform: rotate(45deg);
+      animation: shine 4s infinite;
+    }
+    
+    @keyframes shine {
+      0% { left: -50%; }
+      100% { left: 150%; }
+    }
+    
+    .typing {
+      border-right: .2em solid var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 1.8s steps(30, end) forwards, blink-caret .8s step-end infinite;
+      font-family: 'Share Tech Mono', monospace;
+      color: var(--purple-light);
+      text-shadow: var(--text-glow);
+      font-size: 2.5rem;
+    }
+    
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    
+    @keyframes blink-caret {
+      from, to { border-color: transparent }
+      50% { border-color: var(--accent); }
+    }
+    
+    .close-btn {
+      margin-top: 50px;
+      background: var(--danger);
+      color: white;
+      padding: 18px 35px;
+      border: none;
+      border-radius: 12px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      font-family: 'Orbitron', sans-serif;
+      letter-spacing: 2px;
+      transition: all 0.4s ease;
+      box-shadow: 0 8px 25px rgba(255, 58, 58, 0.5);
+      border: 2px solid #ff6b6b;
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+    
+    .close-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: 0.6s;
+      z-index: -1;
+    }
+    
+    .close-btn:hover::before {
+      left: 100%;
+    }
+    
+    .close-btn:hover {
+      background: #ff1a1a;
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(255, 58, 58, 0.7);
+    }
+    
+    .close-btn i {
+      margin-right: 10px;
+    }
+    
+    footer {
+      position: fixed;
+      bottom: 25px;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.8);
+      font-family: 'Share Tech Mono', monospace;
+      text-align: center;
+      width: 100%;
+      animation: fadeIn 2s ease-out;
+      z-index: 10;
+    }
+    
+    .notification {
+      position: fixed;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 18px 35px;
+      border-radius: 12px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.4);
+      transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      z-index: 1000;
+      font-family: 'Rajdhani', sans-serif;
+      font-weight: 600;
+      border: 2px solid var(--purple-light);
+      display: flex;
+      align-items: center;
+    }
+    
+    .notification.show {
+      bottom: 40px;
+    }
+    
+    .notification i {
+      margin-right: 12px;
+      font-size: 1.3rem;
+    }
+    
+    .grid-lines {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(rgba(156, 39, 176, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(156, 39, 176, 0.08) 1px, transparent 1px);
+      background-size: 60px 60px;
+      z-index: -1;
+      opacity: 0.4;
+    }
+    
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      z-index: -2;
+      filter: drop-shadow(0 0 5px var(--purple-light));
+    }
+    
+    .pulse-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(156, 39, 176, 0.5);
+      z-index: -1;
+      animation: pulseCircle 4s infinite;
+    }
+    
+    @keyframes pulseCircle {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { opacity: 0.5; }
+      100% { transform: scale(3); opacity: 0; }
+    }
+    
+    @media (max-width: 768px) {
+      .payment-options {
+        flex-direction: column;
+        gap: 25px;
+      }
+      
+      .btn {
+        width: 100%;
+        padding: 20px;
+        font-size: 1.2rem;
+        min-width: auto;
+      }
+      
+      h1 {
+        font-size: 2.5rem;
+      }
+      
+      #output {
+        min-width: 90%;
+        padding: 30px;
+        font-size: 1.8rem;
+      }
+      
+      .typing {
+        font-size: 2rem;
+      }
+      
+      .logo {
+        width: 140px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cosmic-bg" id="cosmic-bg"></div>
+  <div class="grid-lines"></div>
+  
+  <!-- Mengembalikan musik original -->
+  <audio id="bg-music" loop>
+    <source src="https://files.catbox.moe/qdth2l.mpeg" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+  
+  <div class="music-control" onclick="toggleMusic()">
+    <i class="fas fa-music"></i>
+  </div>
+
+  <div class="container">
+    <img src="https://f.top4top.io/p_3471gtmiw1.jpg" alt="FxzzId Logo" class="logo">
+    <h1>FXZZID STORE</h1>
+    
+    <div class="payment-options">
+      <button class="btn" onclick="showPayment('QRIS', 'Pm Nomor Utama')">
+        <i class="fas fa-qrcode"></i> QRIS
+      </button>
+      <button class="btn" onclick="showPayment('DANA', '089676041776')">
+        <i class="fas fa-wallet"></i> DANA
+      </button>
+      <button class="btn" onclick="showPayment('NOMOR UTAMA', 'https://j.top4top.io/p_34718hg031.jpg')">
+        <i class="fas fa-phone-alt"></i> NOMOR UTAMA
+      </button>
+    </div>
+    
+    <div id="notification" class="notification">
+      <i class="fas fa-check-circle"></i> Text telah disalin ke clipboard!
+    </div>
+  </div>
+  
+  <div id="output-wrapper">
+    <div id="output"></div>
+    <button class="close-btn" onclick="closeOutput()">
+      <i class="fas fa-times"></i> TUTUP
+    </button>
+  </div>
+  
+  <footer>
+    © FxzzId Store | Web Payment
+  </footer>
+  
+  <script>
+    // Create cosmic background elements
+    const cosmicBg = document.getElementById('cosmic-bg');
+    
+    // Create stars
+    for (let i = 0; i < 200; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.width = `${Math.random() * 4 + 1}px`;
+      star.style.height = star.style.width;
+      star.style.left = `${Math.random() * 100}%`;
+      star.style.top = `${Math.random() * 100}%`;
+      star.style.setProperty('--duration', `${Math.random() * 6 + 3}s`);
+      star.style.setProperty('--opacity', Math.random() * 0.6 + 0.2);
+      star.style.animationDelay = `${Math.random() * 6}s`;
+      cosmicBg.appendChild(star);
+    }
+    
+    // Create planets
+    function createPlanet() {
+      const planet = document.createElement('div');
+      planet.className = 'planet';
+      const size = Math.random() * 100 + 50;
+      planet.style.width = `${size}px`;
+      planet.style.height = `${size}px`;
+      planet.style.left = `${Math.random() * 100}%`;
+      planet.style.top = `${Math.random() * 100}%`;
+      
+      // Random planet colors
+      const hue = Math.floor(Math.random() * 30 + 270); // Purple hues
+      planet.style.background = `radial-gradient(circle, hsl(${hue}, 70%, 60%), hsl(${hue}, 80%, 30%))`;
+      
+      // Add rings to some planets
+      if (Math.random() > 0.7) {
+        const ring = document.createElement('div');
+        ring.className = 'ring';
+        ring.style.width = `${size * 1.8}px`;
+        ring.style.height = `${size * 0.3}px`;
+        ring.style.left = `-${size * 0.4}px`;
+        ring.style.top = `${size * 0.35}px`;
+        ring.style.transform = `rotate(${Math.random() * 60 - 30}deg)`;
+        planet.appendChild(ring);
+      }
+      
+      cosmicBg.appendChild(planet);
+      
+      // Animate planet (very slow movement)
+      planet.style.animation = `float ${Math.random() * 100 + 100}s linear infinite`;
+    }
+    
+    // Create 3-5 planets
+    for (let i = 0; i < 4; i++) {
+      createPlanet();
+    }
+    
+    // Create nebulae
+    for (let i = 0; i < 3; i++) {
+      const nebula = document.createElement('div');
+      nebula.className = 'nebula';
+      const size = Math.random() * 400 + 200;
+      nebula.style.width = `${size}px`;
+      nebula.style.height = `${size}px`;
+      nebula.style.left = `${Math.random() * 100}%`;
+      nebula.style.top = `${Math.random() * 100}%`;
+      nebula.style.opacity = Math.random() * 0.3 + 0.1;
+      cosmicBg.appendChild(nebula);
+    }
+    
+    // Create comets
+    function createComet() {
+      const comet = document.createElement('div');
+      comet.className = 'comet';
+      comet.style.left = `${Math.random() * 100 + 100}%`;
+      comet.style.top = `${Math.random() * 30}%`;
+      
+      // Randomize comet size and color
+      const size = Math.random() * 6 + 3;
+      comet.style.width = `${size}px`;
+      comet.style.height = `${size}px`;
+      
+      // Random purple/pink hue
+      const hue = Math.floor(Math.random() * 30 + 270);
+      comet.style.background = `linear-gradient(90deg, rgba(255,255,255,0.9), hsl(${hue}, 80%, 70%))`;
+      comet.style.boxShadow = `0 0 15px 3px hsl(${hue}, 80%, 70%)`;
+      
+      const before = document.createElement('div');
+      before.style.position = 'absolute';
+      before.style.top = '50%';
+      before.style.transform = 'translateY(-50%)';
+      before.style.width = '200px';
+      before.style.height = '2px';
+      before.style.background = `linear-gradient(90deg, hsl(${hue}, 80%, 70%), transparent)`;
+      
+      comet.appendChild(before);
+      cosmicBg.appendChild(comet);
+      
+      // Animate comet
+      comet.style.animation = `cometFly ${Math.random() * 6 + 4}s linear forwards`;
+      
+      // Remove comet after animation
+      setTimeout(() => {
+        comet.remove();
+      }, 7000);
+    }
+    
+    // Create initial comets
+    for (let i = 0; i < 6; i++) {
+      setTimeout(createComet, i * 2000);
+    }
+    
+    // Keep creating comets periodically
+    setInterval(createComet, 2500);
+    
+    // Create floating particles
+    for (let i = 0; i < 50; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.width = `${Math.random() * 6 + 1}px`;
+      particle.style.height = particle.style.width;
+      particle.style.left = `${Math.random() * 100}%`;
+      particle.style.top = `${Math.random() * 100}%`;
+      particle.style.opacity = Math.random() * 0.6 + 0.2;
+      particle.style.animation = `float ${Math.random() * 15 + 10}s infinite ease-in-out ${Math.random() * 5}s`;
+      cosmicBg.appendChild(particle);
+    }
+    
+    // Create pulse circles
+    function createPulseCircle() {
+      const circle = document.createElement('div');
+      circle.className = 'pulse-circle';
+      circle.style.width = '10px';
+      circle.style.height = '10px';
+      circle.style.left = `${Math.random() * 100}%`;
+      circle.style.top = `${Math.random() * 100}%`;
+      cosmicBg.appendChild(circle);
+      
+      setTimeout(() => {
+        circle.remove();
+      }, 4000);
+    }
+    
+    // Create pulse circles periodically
+    setInterval(createPulseCircle, 1500);
+    
+    // Music control with improved reliability
+    const music = document.getElementById("bg-music");
+    const musicControl = document.querySelector('.music-control');
+    let musicPlaying = false;
+    let musicInitialized = false;
+
+    function toggleMusic() {
+      if (!musicInitialized) {
+        music.play().then(() => {
+          musicPlaying = true;
+          musicInitialized = true;
+          musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+          musicControl.style.background = 'var(--primary)';
+        }).catch(e => {
+          console.log("Gagal memutar musik:", e);
+          musicControl.style.display = 'none';
+        });
+        return;
+      }
+
+      if (musicPlaying) {
+        music.pause();
+        musicControl.innerHTML = '<i class="fas fa-music"></i>';
+        musicControl.style.background = 'rgba(10, 10, 32, 0.9)';
+      } else {
+        music.play();
+        musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+        musicControl.style.background = 'var(--primary)';
+      }
+      musicPlaying = !musicPlaying;
+    }
+
+    // Initialize music on first interaction
+    document.addEventListener('click', function initMusic() {
+      if (!musicInitialized) {
+        music.volume = 0.5; // Set volume to 50%
+        music.play().then(() => {
+          musicPlaying = true;
+          musicInitialized = true;
+          musicControl.innerHTML = '<i class="fas fa-pause"></i>';
+          musicControl.style.background = 'var(--primary)';
+        }).catch(e => {
+          console.log("Autoplay blocked:", e);
+          musicControl.innerHTML = '<i class="fas fa-music"></i>';
+          musicControl.title = "Klik untuk memutar musik";
+        });
+      }
+    }, { once: true });
+    
+    // Payment functions
+    function showPayment(method, content) {
+      const wrapper = document.getElementById("output-wrapper");
+      const output = document.getElementById("output");
+      
+      // Clear previous content
+      output.innerHTML = '';
+      
+      // Add new content based on what we're showing
+      if (content.startsWith('http')) {
+        // It's an image
+        output.innerHTML = `
+          <div class='typing'>${method}</div>
+          <img src='${content}' alt='${method}' class='payment-image' style="margin-top: 40px; max-width: 350px; border: 3px solid var(--purple-light); box-shadow: var(--glow);">
+          <p style="margin-top: 30px; font-size: 1.2rem; color: var(--purple-light); text-shadow: var(--text-glow);">Klik gambar untuk menyalin</p>
+        `;
+        
+        // Make the image clickable to copy
+        const img = output.querySelector('img');
+        img.style.cursor = 'pointer';
+        img.onclick = function() {
+          copyToClipboard(content);
+        };
+      } else {
+        // It's text
+        output.innerHTML = `
+          <div class='typing'>${method}</div>
+          <div style="margin-top: 40px; font-size: 2rem; font-family: 'Share Tech Mono', monospace; color: var(--purple-light); text-shadow: var(--text-glow); cursor: pointer; padding: 15px 30px; background: rgba(26, 26, 58, 0.5); border-radius: 10px; border: 2px solid var(--purple-light);" onclick="copyToClipboard('${content}')">${content}</div>
+          <p style="margin-top: 30px; font-size: 1.2rem; color: var(--purple-light); text-shadow: var(--text-glow);">Klik teks untuk menyalin</p>
+        `;
+      }
+      
+      // Show the modal
+      wrapper.classList.add('active');
+      
+      // Automatically copy to clipboard
+      copyToClipboard(content);
+    }
+    
+    function closeOutput() {
+      const wrapper = document.getElementById("output-wrapper");
+      wrapper.classList.remove('active');
+    }
+    
+    // Copy to clipboard function
+    function copyToClipboard(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        showNotification();
+      }).catch(err => {
+        console.error('Could not copy text: ', err);
+        // Fallback for older browsers
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showNotification();
+        } catch (err) {
+          console.error('Fallback copy failed: ', err);
+        }
+        document.body.removeChild(textarea);
+      });
+    }
+    
+    // Show notification
+    function showNotification() {
+      const notification = document.getElementById('notification');
+      notification.classList.add('show');
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+      }, 3500);
+    }
+    
+    // Close modal when clicking outside content
+    document.getElementById("output-wrapper").addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeOutput();
+      }
+    });
+    
+    // Add floating animation to buttons with different delays
+    document.querySelectorAll('.btn').forEach((btn, index) => {
+      btn.style.animationDelay = `${index * 0.2}s`;
+    });
+  </script>
+</body>
+</html>
